@@ -1,0 +1,11 @@
+# Compiled python modules.
+*.pyc
+
+# Virtual python environments.
+/py*/
+
+# Setuptools output.
+/build/
+/dist/
+/*.egg-info
+/*.egg
