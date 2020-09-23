@@ -1,7 +1,14 @@
 import platform
 
 
-def target():
+def cpu():
+    return platform.machine()
+
+
+def system():
     system = platform.system().lower()
-    system = { 'darwin': 'macos' }.get(system, system)
-    return f'{platform.machine()}-{system}'
+    return { 'darwin': 'macos' }.get(system, system)
+
+
+def target():
+    return f'{cpu()}-{system()}'
