@@ -4,7 +4,7 @@ setup(name='zup',
       version='0.0.0',
       description='Zig compiler multiplexer',
       classifiers = [
-          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.8',
           'License :: OSI Approved :: zlib/libpng License',
           'Operating System :: OS Independent',
           'Topic :: System :: Installation/Setup',
@@ -21,4 +21,4 @@ setup(name='zup',
       },
       include_package_data=True,
       zip_safe=True,
-      python_requires='>=3.6')
+      python_requires='>=3.8')
