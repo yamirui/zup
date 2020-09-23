@@ -6,8 +6,11 @@ import zup
 
 @zup.command
 def install(args):
-    # TODO: replace install dir with config parameter
-    args = (args.index, args.version, args.target, './test')
+    args = (args.index,
+            args.version,
+            args.target,
+            getattr(args.cfg, 'install_path', zup.config.default_install_path()),
+            args.force)
     zup.commands.install(*args)
 
 
@@ -19,6 +22,7 @@ def main():
     command = commands.add_parser('install', description='Install Zig compilers.')
     command.add_argument('-i', '--index', help='link to the index of releases', default='https://ziglang.org/download/index.json')
     command.add_argument('-t', '--target', help='target of machine using zig compiler', default=zup.host.target())
+    command.add_argument('--force', action='store_true', help='install even if version already exists', default=False)
     command.add_argument('version', help='version of the release', default='master')
     command.set_defaults(func=install)
 
@@ -26,6 +30,6 @@ def main():
         parser.print_help()
     else:
         args = parser.parse_args()
+        args.cfg = zup.config.load(zup)
         sys.exit(args.func(args))
-
     sys.exit(0)

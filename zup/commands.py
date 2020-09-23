@@ -1,3 +1,5 @@
+from pathlib import Path
+import shutil
 import sys
 
 from . import fetch
@@ -10,9 +12,9 @@ def command(func):
         try:
             func(*args, **kwargs)
         except CommandWarning as w:
-            print(f'⚠ {str(w)}')
+            print(f'\t⚠ {str(w)}')
         except CommandError as e:
-            print(f'✖ {str(e)}', file=sys.stderr)
+            print(f'\t✖ {str(e)}', file=sys.stderr)
             return 1
         except KeyboardInterrupt:
             print('\n\nCancelled.')
@@ -20,7 +22,7 @@ def command(func):
     return wrapper
 
 
-def install(index, version, target, dest):
+def install(index, version, target, dest, force):
     if (versions := fetch.index(index)) is None:
         raise CommandError(f'Could not fetch index from "{index}".')
     if (targets := versions.get(version, None)) is None:
@@ -30,5 +32,9 @@ def install(index, version, target, dest):
     if (url := meta.get('tarball', None)) is None:
         raise CommandError('Could not find archived download link for this version.\nThis is a bug.')
     if name := installs.is_installed(url, dest):
-        raise CommandWarning(f'{name} is already installed.')
+        if force:
+            print(f'\t✖ {name}')
+            shutil.rmtree(dest / Path(name), ignore_errors=True)
+        else:
+            raise CommandWarning(f'{name} is already installed.')
     fetch.release(url, dest)
