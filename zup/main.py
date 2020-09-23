@@ -5,18 +5,35 @@ import zup
 
 
 @zup.command
+def config(args):
+    zup.commands.config()
+
+
+@zup.command
 def install(args):
     args = (args.index,
             args.version,
             args.target,
-            getattr(args.cfg, 'install_path', zup.config.default_install_path()),
+            getattr(args.cfg, 'install_dir', zup.config.default_install_dir()),
             args.force)
     zup.commands.install(*args)
+
+
+@zup.command
+def default(args):
+    args = (getattr(args.cfg, 'install_dir', zup.config.default_install_dir()),
+            getattr(args.cfg, 'symlink_dir', zup.config.default_symlink_dir()),
+            args.name)
+    zup.commands.default(*args)
 
 
 def main():
     parser = argparse.ArgumentParser()
     commands = parser.add_subparsers()
+
+    # config
+    command = commands.add_parser('config', description='Configure zup. (opens config.py in text editor)')
+    command.set_defaults(func=config)
 
     # install
     command = commands.add_parser('install', description='Install Zig compilers.')
@@ -25,6 +42,11 @@ def main():
     command.add_argument('--force', action='store_true', help='install even if version already exists', default=False)
     command.add_argument('version', help='version of the release', default='master')
     command.set_defaults(func=install)
+
+    # default
+    command = commands.add_parser('default', description='Set default zig compiler. (symlink to selected version)')
+    command.add_argument('name', help='full version name')
+    command.set_defaults(func=default)
 
     if len(sys.argv) <= 1:
         parser.print_help()

@@ -2,9 +2,11 @@ from pathlib import Path
 import shutil
 import sys
 
+from .error import CommandWarning, CommandError
 from . import fetch
 from . import installs
-from .error import CommandWarning, CommandError
+from . import host
+from . import config as cfg
 
 
 def command(func):
@@ -20,6 +22,10 @@ def command(func):
             print('\n\nCancelled.')
         return 0
     return wrapper
+
+
+def config():
+    cfg.open_config()
 
 
 def install(index, version, target, dest, force):
@@ -38,3 +44,19 @@ def install(index, version, target, dest, force):
         else:
             raise CommandWarning(f'{name} is already installed.')
     fetch.release(url, dest)
+
+
+def default(src, dest, name):
+    if host.system() == 'windows':
+        exec_ext = '.exe'
+        link_ext = '.bat'
+    else:
+        exec_ext = ''
+        link_ext = ''
+    executable = Path(src) / f'{name}/zig{exec_ext}'
+    link = f'{dest}/zig{link_ext}'
+
+    if not Path(executable).is_file():
+        raise CommandError(f'"{name}" is not installed.')
+    host.link(executable, link)
+    print(f'\t🠒 {name}')

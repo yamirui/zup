@@ -8,6 +8,16 @@ import os
 from . import host
 
 
+def default_config():
+    return '\n'.join([
+        f'# directory where zig compilers are installed',
+        f'install_dir = "{default_install_dir()}"',
+        f'',
+        f'# directory where symlinks to compilers are created',
+        f'symlink_dir = "{default_symlink_dir()}"'
+    ])
+
+
 def config_path():
     if host.system() == 'windows':
         return Path(os.getenv('APPDATA')) / 'zup/config.py'
@@ -17,10 +27,12 @@ def config_path():
         return Path.home() / '.config/zup/config.py'
 
 
-def open():
+def open_config():
     path = config_path()
-    print(f'opening {path}')
     path.parent.mkdir(parents=True, exist_ok=True)
+    if not path.is_file():
+        with open(path, 'w') as f:
+            f.write(default_config())
     if host.system() == 'windows':
         os.startfile(path)
     elif host.system() == 'macos':
@@ -37,7 +49,7 @@ def load(zup):
         pass
 
 
-def default_install_path():
+def default_install_dir():
     if host.system() == 'windows':
         return Path(os.getenv('LOCALAPPDATA')) / 'zup'
     elif host.system() == 'macos':
@@ -46,4 +58,10 @@ def default_install_path():
         return Path.home() / '.local/share/zup'
 
 
-# Path(config_path).parent.mkdir(parents=True, exist_ok=True)
+def default_symlink_dir():
+    if host.system() == 'windows':
+        return default_install_path()
+    elif host.system() == 'macos':
+        return default_install_path()
+    else:
+        return Path.home() / '.local/bin'

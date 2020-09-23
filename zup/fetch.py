@@ -8,6 +8,7 @@ import zipfile
 import shutil
 import json
 import math
+import os
 
 
 def index(url):
@@ -19,7 +20,7 @@ def release(url, dest):
     with tempfile.TemporaryDirectory() as tmp_dir:
         fname = Path(url).name
         print(f'\t⌕ {fname}')
-        (path, _) = urlretrieve(url,
+        path, _ = urlretrieve(url,
                                 filename=Path(tmp_dir) / fname,
                                 reporthook=download_hook(unit=(1048576, 'MiB')))
         unpack(path, dest)
@@ -41,14 +42,14 @@ def download_hook(unit):
 def unpack(path, dest):
     if tarfile.is_tarfile(path):
         with tarfile.open(path, 'r') as tf:
-            tf.extractall(dest, members=unpack_hook(tf))
+            tf.extractall(dest, members=unpack_hook(tf, path.stem.rsplit('.', 1)[0]))
     elif zipfile.is_zipfile(path):
         with zipfile.ZipFile(path) as zf:
-            zf.extractall(dest, members=unpack_hook(zf.namelist()))
+            zf.extractall(dest, members=unpack_hook(zf.namelist(), path.stem))
     else:
         print(f'{path} is unsupported archive format.\nThis is a bug.')
 
-def unpack_hook(files):
+def unpack_hook(files, name):
     spinner = cycle(['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'])
     t = 0
     for f in files:
@@ -56,4 +57,4 @@ def unpack_hook(files):
             t = time()
             print(f'\t➥ {next(spinner)}', end='\r')
         yield f
-    print('\t➥ ⠿')
+    print(f'\t➥ {name}')
