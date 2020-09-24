@@ -10,11 +10,14 @@ from . import host
 
 def default_config():
     return '\n'.join([
+        f'# url where index will be fetched from',
+        f'index_url = zup.config.default_index_url()',
+        f'',
         f'# directory where zig compilers are installed',
-        f'install_dir = "{default_install_dir()}"',
+        f'install_dir = zup.config.default_install_dir()',
         f'',
         f'# directory where symlinks to compilers are created',
-        f'symlink_dir = "{default_symlink_dir()}"'
+        f'symlink_dir = zup.config.default_symlink_dir()'
     ])
 
 
@@ -49,6 +52,10 @@ def load(zup):
         pass
 
 
+def default_index_url():
+    return 'https://ziglang.org/download/index.json'
+
+
 def default_install_dir():
     if host.system() == 'windows':
         return Path(os.getenv('LOCALAPPDATA')) / 'zup'
@@ -60,8 +67,8 @@ def default_install_dir():
 
 def default_symlink_dir():
     if host.system() == 'windows':
-        return default_install_path()
+        return default_install_dir()
     elif host.system() == 'macos':
-        return default_install_path()
+        return default_install_dir()
     else:
         return Path.home() / '.local/bin'

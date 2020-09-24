@@ -11,7 +11,7 @@ def config(args):
 
 @zup.command
 def ls(args):
-    args = (args.index,
+    args = (getattr(args.cfg, 'index_url', args.index,
             args.remote,
             getattr(args.cfg, 'install_dir', zup.config.default_install_dir()))
     zup.commands.ls(*args)
@@ -19,7 +19,7 @@ def ls(args):
 
 @zup.command
 def install(args):
-    args = (args.index,
+    args = (getattr(args.cfg, 'index_url', args.index,
             args.version,
             args.target,
             getattr(args.cfg, 'install_dir', zup.config.default_install_dir()),
@@ -52,13 +52,13 @@ def main():
 
     # list
     command = commands.add_parser('list', description='List zig compiler releases. (local by default)')
-    command.add_argument('-i', '--index', help='link to the index of releases', default='https://ziglang.org/download/index.json')
+    command.add_argument('-i', '--index', help='link to the index of releases', default=zup.config.default_index_url())
     command.add_argument('-r', '--remote', action='store_true', help='list remote releases', default=False)
     command.set_defaults(func=ls)
 
     # install
     command = commands.add_parser('install', description='Install Zig compilers.')
-    command.add_argument('-i', '--index', help='link to the index of releases', default='https://ziglang.org/download/index.json')
+    command.add_argument('-i', '--index', help='link to the index of releases', default=zup.config.default_index_url())
     command.add_argument('-t', '--target', help='target of machine using zig compiler', default=zup.host.target())
     command.add_argument('--force', action='store_true', help='install even if version already exists', default=False)
     command.add_argument('version', help='version of the release', default='master')
