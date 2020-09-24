@@ -19,13 +19,28 @@ def command(func):
             print(f'\t✖ {str(e)}', file=sys.stderr)
             return 1
         except KeyboardInterrupt:
-            print('\n\nCancelled.')
+            print('\n\t␘ Cancelled.')
         return 0
     return wrapper
 
 
 def config():
     cfg.open_config()
+
+
+def ls(index, remote, dest):
+    if remote:
+        if (versions := fetch.index(index)) is None:
+            raise CommandError(f'Could not fetch index from "{index}".')
+        for version in versions.keys():
+            print(f'{version}')
+            targets = versions[version]
+            for target in targets.keys():
+                if 'tarball' in targets[target]:
+                    print(f'  {target}')
+    else:
+        for version in installs.ls(dest):
+            print(f'{version}')
 
 
 def install(index, version, target, dest, force):
@@ -39,8 +54,7 @@ def install(index, version, target, dest, force):
         raise CommandError('Could not find archived download link for this version.\nThis is a bug.')
     if name := installs.is_installed(url, dest):
         if force:
-            print(f'\t✖ {name}')
-            shutil.rmtree(dest / Path(name), ignore_errors=True)
+            installs.remove(dest / Path(name))
         else:
             raise CommandWarning(f'{name} is already installed.')
     fetch.release(url, dest)
@@ -57,6 +71,5 @@ def default(src, dest, name):
     link = f'{dest}/zig{link_ext}'
 
     if not Path(executable).is_file():
-        raise CommandError(f'"{name}" is not installed.')
+        raise CommandError(f'"{name}" is not an installed binary release.')
     host.link(executable, link)
-    print(f'\t🠒 {name}')
