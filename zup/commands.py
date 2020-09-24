@@ -43,7 +43,7 @@ def ls(index, remote, dest):
             print(f'{version}')
 
 
-def install(index, version, target, dest, force):
+def install(index, version, target, dest, symlink_dir, set_default, force):
     if (versions := fetch.index(index)) is None:
         raise CommandError(f'Could not fetch index from "{index}".')
     if (targets := versions.get(version, None)) is None:
@@ -55,10 +55,14 @@ def install(index, version, target, dest, force):
     name = installs.name_from_path(url)
     if installs.is_installed(name, dest):
         if force:
-            installs.remove(dest / Path(name))
+            installs.remove(dest, name)
         else:
+            if set_default:
+                default(dest, symlink_dir, name)
             raise CommandWarning(f'"{name}" is already installed.')
     fetch.release(url, dest)
+    if set_default:
+        default(dest, symlink_dir, name)
 
 
 def remove(dest, name):

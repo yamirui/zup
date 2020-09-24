@@ -27,4 +27,4 @@ def link(src, dest):
         with contextlib.suppress(FileNotFoundError):
             os.remove(dest)
         os.symlink(src, dest)
-    print(f'\t🠒 {name}')
+    print(f'\t🠒 {src.parent.name}')
