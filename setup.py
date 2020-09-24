@@ -1,14 +1,14 @@
 from setuptools import setup
 
 setup(name='zup',
-      version='0.0.0',
+      version='0.1.0',
       description='Zig compiler multiplexer',
       classifiers = [
           'Programming Language :: Python :: 3.8',
           'License :: OSI Approved :: zlib/libpng License',
           'Operating System :: OS Independent',
           'Topic :: System :: Installation/Setup',
-          'Development Status :: 1 - Planning'
+          'Development Status :: 4 - Beta'
       ],
       keywords='zig',
       url='https://github.com/yamirui/zup',
