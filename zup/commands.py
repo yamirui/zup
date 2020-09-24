@@ -52,13 +52,20 @@ def install(index, version, target, dest, force):
         raise CommandError(f'Target "{target}" does not exist for version "{version}".')
     if (url := meta.get('tarball', None)) is None:
         raise CommandError('Could not find archived download link for this version.\nThis is a bug.')
-    if name := installs.is_installed(url, dest):
+    name = installs.name_from_path(url)
+    if installs.is_installed(name, dest):
         if force:
             installs.remove(dest / Path(name))
         else:
-            raise CommandWarning(f'{name} is already installed.')
+            raise CommandWarning(f'"{name}" is already installed.')
     fetch.release(url, dest)
 
+
+def remove(dest, name):
+    if installs.is_installed(name, dest):
+        installs.remove(dest, name)
+    else:
+        raise CommandWarning(f'"{name}" is not installed.')
 
 def default(src, dest, name):
     if host.system() == 'windows':

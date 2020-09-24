@@ -28,6 +28,13 @@ def install(args):
 
 
 @zup.command
+def remove(args):
+    args = (getattr(args.cfg, 'install_dir', zup.config.default_install_dir()),
+            args.name)
+    zup.commands.remove(*args)
+
+
+@zup.command
 def default(args):
     args = (getattr(args.cfg, 'install_dir', zup.config.default_install_dir()),
             getattr(args.cfg, 'symlink_dir', zup.config.default_symlink_dir()),
@@ -56,6 +63,11 @@ def main():
     command.add_argument('--force', action='store_true', help='install even if version already exists', default=False)
     command.add_argument('version', help='version of the release', default='master')
     command.set_defaults(func=install)
+
+    # remove
+    command = commands.add_parser('remove', description='Remove installed Zig compilers.')
+    command.add_argument('name', help='full version name')
+    command.set_defaults(func=remove)
 
     # default
     command = commands.add_parser('default', description='Set default zig compiler. (symlink to selected version)')

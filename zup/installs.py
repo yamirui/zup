@@ -21,8 +21,7 @@ def name_from_path(path):
     return stem
 
 
-def is_installed(path, dest):
-    name = name_from_path(path)
+def is_installed(name, dest):
     try:
         for f in os.scandir(dest):
             if f.is_dir() and f.name == name:
@@ -32,6 +31,6 @@ def is_installed(path, dest):
     return None
 
 
-def remove(path):
-    shutil.rmtree(path, ignore_errors=True)
+def remove(dest, name):
+    shutil.rmtree(Path(dest) / name, ignore_errors=True)
     print(f'\t✖ {name}')
