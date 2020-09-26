@@ -5,7 +5,8 @@ import os
 
 
 def cpu():
-    return platform.machine()
+    machine = platform.machine().lower()
+    return {'amd64': 'x86_64'}.get(machine, machine)
 
 
 def system():
