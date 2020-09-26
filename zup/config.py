@@ -36,7 +36,14 @@ def open_config(zup):
         with open(path, 'w') as f:
             f.write(default_config(zup))
     if host.system() == 'windows':
-        os.startfile(path)
+        assoc = str(subprocess.check_output(('cmd.exe', '/c', 'ftype', 'Python.File')))
+        if 'py.exe' in assoc or 'python.exe' in assoc:
+            print('\t⚠ !!! WARNING !!! ⚠')
+            print('\tYour python installation has set the default *.py open method to be python interpreter')
+            print('\tThis is definitely not what you want, falling back to notepad.exe')
+            subprocess.call(('notepad.exe', path))
+        else:
+            os.startfile(path)
     elif host.system() == 'macos':
         subprocess.call(('open', path))
     else:
