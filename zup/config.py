@@ -10,13 +10,13 @@ from . import host
 def default_config(zup):
     return '\n'.join([
         f'# url where index will be fetched from',
-        f'index_url = \'{zup.config.default_index_url()}\'',
+        f'index_url = "{str(zup.config.default_index_url())}"',
         f'',
         f'# directory where zig compilers are installed',
-        f'install_dir = \'{zup.config.default_install_dir()}\'',
+        f'install_dir = "{str(zup.config.default_install_dir())}"',
         f'',
         f'# directory where symlinks to compilers are created',
-        f'symlink_dir = \'{zup.config.default_symlink_dir()}\''
+        f'symlink_dir = "{str(zup.config.default_symlink_dir())}"'
     ])
 
 
