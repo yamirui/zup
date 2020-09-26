@@ -9,6 +9,7 @@ $ pip install zup
 ```
 
 ### Installing Zig
+
 This will install latest master Zig release and set it as default `zig` command in your system.
 
 Note that zup never modifies your system configuration and you must add the symlink directory that zup manages to your `%PATH%` on Windows or `$PATH` on other platforms.
@@ -18,8 +19,7 @@ zup install master -d
 
 ### Configuration
 Config file is a python script that gets executed before any command is ran.
-It can be opened with `zup config`.
-
+It can be opened with `zup config`. This uses your default program for a filetype; on windows the default is `python.exe`, please set it to a proper text editor or it won't open. Zup does not check or configure any system variables and can't know what the config will be opened with and it is your job as the owner of your system to configure it properly.
 ```python
 # config.py
 # windows: Path(os.getenv('APPDATA')) / 'zup/config.py'
@@ -42,4 +42,5 @@ install_dir = zup.config.default_install_dir()
 # other: Path.home() / '.local/bin'
 symlink_dir = zup.config.default_symlink_dir()
 ```
+
 
