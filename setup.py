@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='zup',
-      version='0.1.2',
+      version='0.1.3',
       description='Zig compiler multiplexer',
       classifiers = [
           'Programming Language :: Python :: 3.8',

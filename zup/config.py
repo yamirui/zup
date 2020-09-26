@@ -13,10 +13,10 @@ def default_config(zup):
         f'index_url = "{str(zup.config.default_index_url())}"',
         f'',
         f'# directory where zig compilers are installed',
-        f'install_dir = "{str(zup.config.default_install_dir())}"',
+        f'install_dir = "{str(zup.config.default_install_dir().as_posix())}"',
         f'',
         f'# directory where symlinks to compilers are created',
-        f'symlink_dir = "{str(zup.config.default_symlink_dir())}"'
+        f'symlink_dir = "{str(zup.config.default_symlink_dir().as_posix())}"'
     ])
 
 

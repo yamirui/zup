@@ -10,6 +10,8 @@ $ pip install zup
 
 ### Installing Zig
 This will install latest master Zig release and set it as default `zig` command in your system.
+
+Note that zup never modifies your system configuration and you must add the symlink directory that zup manages to your `%PATH%` on Windows or `$PATH` on other platforms.
 ```bash
 zup install master -d
 ```
@@ -40,3 +42,4 @@ install_dir = zup.config.default_install_dir()
 # other: Path.home() / '.local/bin'
 symlink_dir = zup.config.default_symlink_dir()
 ```
+
