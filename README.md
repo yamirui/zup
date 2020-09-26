@@ -18,7 +18,6 @@ zup install master -d
 Config file is a python script that gets executed before any command is ran.
 It can be opened with `zup config`.
 
-`zup` exposes itself as a library in config script.
 ```python
 # config.py
 # windows: Path(os.getenv('APPDATA')) / 'zup/config.py'
