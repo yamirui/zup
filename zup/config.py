@@ -2,22 +2,21 @@ from argparse import Namespace
 from pathlib import Path
 from runpy import run_path
 import subprocess
-import shlex
 import os
 
 from . import host
 
 
-def default_config():
+def default_config(zup):
     return '\n'.join([
         f'# url where index will be fetched from',
-        f'index_url = zup.config.default_index_url()',
+        f'index_url = \'{zup.config.default_index_url()}\'',
         f'',
         f'# directory where zig compilers are installed',
-        f'install_dir = zup.config.default_install_dir()',
+        f'install_dir = \'{zup.config.default_install_dir()}\'',
         f'',
         f'# directory where symlinks to compilers are created',
-        f'symlink_dir = zup.config.default_symlink_dir()'
+        f'symlink_dir = \'{zup.config.default_symlink_dir()}\''
     ])
 
 
@@ -30,12 +29,12 @@ def config_path():
         return Path.home() / '.config/zup/config.py'
 
 
-def open_config():
+def open_config(zup):
     path = config_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     if not path.is_file():
         with open(path, 'w') as f:
-            f.write(default_config())
+            f.write(default_config(zup))
     if host.system() == 'windows':
         os.startfile(path)
     elif host.system() == 'macos':

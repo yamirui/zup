@@ -6,7 +6,8 @@ import zup
 
 @zup.command
 def config(args):
-    zup.commands.config()
+    args = zup,
+    zup.commands.config(*args)
 
 
 @zup.command

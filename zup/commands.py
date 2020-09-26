@@ -25,8 +25,8 @@ def command(func):
     return wrapper
 
 
-def config():
-    cfg.open_config()
+def config(zup):
+    cfg.open_config(zup)
 
 
 def ls(index, remote, dest):
