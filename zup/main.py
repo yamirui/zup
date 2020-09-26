@@ -81,6 +81,7 @@ def main():
         parser.print_help()
     else:
         args = parser.parse_args()
-        args.cfg = zup.config.load(zup)
+        if args.func.__name__ != 'config':
+            args.cfg = zup.config.load(zup)
         sys.exit(args.func(args))
     sys.exit(0)

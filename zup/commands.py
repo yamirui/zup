@@ -21,6 +21,7 @@ def command(func):
         except KeyboardInterrupt:
             print('\n\t␘ Cancelled.')
         return 0
+    wrapper.__name__ = func.__name__
     return wrapper
 
 
