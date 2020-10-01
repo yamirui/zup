@@ -40,8 +40,8 @@ def ls(index, remote, dest):
                 if 'tarball' in targets[target]:
                     print(f'  {target}')
     else:
-        for version in installs.ls(dest):
-            print(f'{version}')
+        for (date, version) in installs.ls(dest):
+            print(f'{date} | {version}')
 
 
 def install(index, version, target, dest, symlink_dir, set_default, force):

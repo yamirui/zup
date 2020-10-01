@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 import shutil
 import os
@@ -6,12 +7,14 @@ import os
 def ls(dest):
     versions = []
     try:
-        for f in os.scandir(dest):
-            if f.is_dir():
-                versions.append(f.name)
+        for p in os.scandir(dest):
+            if p.is_dir():
+                t = os.path.getmtime(p)
+                date = datetime.fromtimestamp(t)
+                versions.append((date, p.name))
     except FileNotFoundError:
         pass
-    return versions
+    return sorted(versions, reverse=True)
 
 
 def name_from_path(path):
